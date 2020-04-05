@@ -81,8 +81,8 @@ def recursive_search():
 def export_results():
     if user_inputs[4] == 'csv':
         filename = user_inputs[5]
-        csv.writer(open(filename, 'w', newline='')).writerows(search_links)
-        csv.writer(open(filename, 'w', newline='')).writerows(recursive_search_array)
+        csv.writer(open(filename, 'w', newline='', encoding='utf-8')).writerows(search_links)
+        csv.writer(open(filename, 'w', newline='', encoding='utf-8')).writerows(recursive_search_array)
     elif user_inputs[4] == 'json':
         print('Пока не работает :(' + '\n' + (' #' * 50))
     else:
