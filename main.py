@@ -1,7 +1,6 @@
-import datetime
-from keys import ROOT_URL_YA, HEADERS
-import requests
 from bs4 import BeautifulSoup as bs
+import csv, json, requests, datetime
+from keys import ROOT_URL_YA, HEADERS
 
 
 date_stamp = datetime.datetime.today().strftime("%Y-%m-%d-%H-%M-%S")
@@ -16,20 +15,22 @@ def main():
     user_inputs.append(serp_string)
     serp_results = int(input('Сколько результатов найти?: '))
     user_inputs.append(serp_results)
-    rec_search = True
+    rec_search = input('Рекурсия? Укажи True or False')
+    # rec_search = True
     user_inputs.append(rec_search)
     search_url = ROOT_URL_YA + 'text=' + serp_string + '&lr=' + str(serp_results)
     user_inputs.append(search_url)
-    # result_type = input('Укажите конечный формат для результата: json, csv, console ')
-    result_type = 'csv'
+    result_type = input('Укажите конечный формат для результата: json, csv, console ')
+    # result_type = 'csv'
     user_inputs.append(result_type)
     filename = str('result--' + date_stamp + '.' + result_type)
+    user_inputs.append(filename)
     print('Длина списка - ' + str(len(user_inputs)))
     print(user_inputs)
     print('Рекурсия? ' + str(user_inputs[2]))
 
 
-def Request():
+def search():
     print('*' * 100)
     print('Первичный поиск запущен!')
     print('*' * 100)
@@ -48,7 +49,6 @@ def Request():
                 search_links.append(result_link)
             else:
                 break
-            # csv.writer(open(result_file_serp, "w", newline='')).writerows(search_links)
         print('Длина массива результатов первичного поиска: ' + str(len(search_links)))
         print('*' * 100)
         print('Первичный поиск завершен!')
@@ -59,43 +59,46 @@ def Request():
 
 
 def recursive_search():
-    i = 0
-    length = len(search_links)
-    for el in search_links:
-        print(el)
-    # while i < length:
-    #     look_for = search_links[0](i)
-    #     print('Парсим сайт для рекурсивного поиска: ' + look_for)
-    #     recursive_response = requests.get(look_for, headers=HEADERS)
-    #     if recursive_response.ok:
-    #         recursive_soup = bs(recursive_response.text, 'html.parser')
-    #         # a_list = recursive_soup("a")
-    #         # print(a_list)
-    #         for el in recursive_soup.findAll('a'):
-    #             link = str(el.get('href'))
-    #             name = str(el.get_text())
-    #             result_link = [name, link]
-    #             recursive_search_array.append(result_link)
-    #             #print(result_link)
-    #             # csv.writer(open(result_file_recursive, "w", newline='')).writerows(recursive_search_array)
-    #         print(len(recursive_search_array))
-    #     else:
-    #         print('error! cant get response for recursive search')
-    #     i = i + 1
+    for link in search_links:
+        look_for = link[1]
+        print('Парсим сайт для рекурсивного поиска: ' + look_for)
+        recursive_response = requests.get(look_for, headers=HEADERS)
+        if recursive_response.ok:
+            recursive_soup = bs(recursive_response.text, 'html.parser')
+            # a_list = recursive_soup("a")
+            # print(a_list)
+            for el in recursive_soup.findAll('a'):
+                link = str(el.get('href'))
+                name = str(el.get_text())
+                result_link = [name, link]
+                recursive_search_array.append(result_link)
+            print(len(recursive_search_array))
+        else:
+            print('error! cant get response for recursive search')
     print(len(recursive_search_array))
 
 
 def export_results():
-    pass
+    if user_inputs[4] == 'csv':
+        filename = user_inputs[5]
+        csv.writer(open(filename, 'w', newline='')).writerows(search_links)
+        csv.writer(open(filename, 'w', newline='')).writerows(recursive_search_array)
+    elif user_inputs[4] == 'json':
+        print('Пока не работает :(' + '\n' + (' #' * 50))
+    else:
+        print('Вывожу результаты в консоль')
+        print(search_links)
+        print(recursive_search_array)
 
 
 if __name__ == '__main__':
     main()
-    Request()
-    if user_inputs[2] == True:
+    search()
+    if user_inputs[2]:
+        print('!Начинаем рекурсивный поиск!')
         recursive_search()
     else:
-        print('Поиск завершен.')
+        print('Первичный поиск завершен.')
     export_results()
 
 

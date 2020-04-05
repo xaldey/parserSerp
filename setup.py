@@ -11,8 +11,8 @@ config = {
 	'download_url': 'https://github.com/xaldey/parserSerp',
 	'author_email': 'Мой email',
 	'version': '0.1',
-	'install_requires': ['nose'],
-	'packages': ['Parse'],		
+	'install_requires': ['bs4', 'requests', 'datetime', 'csv'],
+	'packages': [],
 	'scripts': [],
 	'name': 'parserSerp',	
 }
