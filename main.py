@@ -2,6 +2,8 @@ from bs4 import BeautifulSoup as bs
 import csv
 import requests
 import datetime
+import unittest
+
 from keys import ROOT_URL_YA, HEADERS
 
 date_stamp = datetime.datetime.today().strftime("%Y-%m-%d-%H-%M-%S")
