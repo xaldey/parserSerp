@@ -31,6 +31,15 @@ def main():
     print(user_inputs)
     print('Рекурсия? ' + str(user_inputs[2]))
 
+class user_answers_test(unittest.TestCase):
+
+    def test_null_answers(self):
+        res = ''
+        self.assertEqual(res, '')
+
+    def no_keys(self):
+        res = ROOT_URL_YA
+        self.assertEqual(res, 'https://yandex.ru/search/?')
 
 def search():
     print('*' * 100)
@@ -95,6 +104,7 @@ def export_results():
 
 
 if __name__ == '__main__':
+    unittest.main()
     main()
     search()
     if user_inputs[2]:
