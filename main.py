@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup as bs
 import csv
 import requests
 import datetime
-import unittest
+
 
 from keys import ROOT_URL_YA, HEADERS
 
@@ -12,7 +12,7 @@ search_links = []
 recursive_search_array = []
 
 
-def main():
+def quiz():
     serp_string = str(input('Что ищем?: '))
     user_inputs.append(serp_string)
     serp_results = int(input('Сколько результатов найти?: '))
@@ -31,15 +31,7 @@ def main():
     print(user_inputs)
     print('Рекурсия? ' + str(user_inputs[2]))
 
-class user_answers_test(unittest.TestCase):
 
-    def test_null_answers(self):
-        res = ''
-        self.assertEqual(res, '')
-
-    def no_keys(self):
-        res = ROOT_URL_YA
-        self.assertEqual(res, 'https://yandex.ru/search/?')
 
 def search():
     print('*' * 100)
@@ -104,8 +96,7 @@ def export_results():
 
 
 if __name__ == '__main__':
-    unittest.main()
-    main()
+    quiz()
     search()
     if user_inputs[2]:
         print('!Начинаем рекурсивный поиск!')
